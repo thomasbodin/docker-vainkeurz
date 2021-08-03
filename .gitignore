@@ -1,0 +1,21 @@
+*.log
+*.tmp
+*.sublime-project
+*.sublime-workspace
+_ai-cache
+
+#### Dot Directory
+.idea/
+.sass-cache/
+
+#### Dot file
+.DS_Store
+*.DS_Store
+
+#### WordPress
+wordpress/
+!wordpress/wp-config-docker.php
+!wordpress/wp-config.php
+
+#### DB
+db/

@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+
+  # CONTAINER - MYSQL :
+  # https://hub.docker.com/_/mysql
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: always
+    env_file: config.env
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+
+  # CONTAINER - WORDPRESS :
+  # https://hub.docker.com/_/wordpress
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    volumes:
+      - ./wordpress:/var/www/html/
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    ports:
+      - 8000:80
+    restart: always
+    env_file: config.env
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: $MYSQL_DATABASE
+      WORDPRESS_DB_USER: $MYSQL_USER
+      WORDPRESS_DB_PASSWORD: $MYSQL_PASSWORD
+      WORDPRESS_TABLE_PREFIX: $MYSQL_PREFIX
+      WORDPRESS_DEBUG: $WP_DEBUG
+
+volumes:
+  db_data: {}
